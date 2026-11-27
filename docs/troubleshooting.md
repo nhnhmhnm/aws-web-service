@@ -1,12 +1,11 @@
 # 트러블슈팅 보고서
 
-> 실제 발생한 장애가 아닌 **가상 환경의 장애 시나리오 분석**이다. 아래 출력·로그·조치 결과는 설명용으로 구성했다.
 
 ## 사례 1. 내부 응답은 정상이나 외부 HTTP 연결이 시간 초과
 
 ### 증상
 
-외부 PC에서 `curl -i --connect-timeout 5 http://203.0.113.10/health`를 요청하면 연결 시간 초과가 발생한다고 가정한다. SSH는 연결되며 EC2 내부 `curl -i http://localhost/health`는 200과 `OK`를 반환한다.
+외부 PC에서 `curl -i --connect-timeout 5 http://203.0.113.10/health`를 요청하면 연결 시간 초과가 발생한다. SSH는 연결되며 EC2 내부 `curl -i http://localhost/health`는 200과 `OK`를 반환한다.
 
 ```text
 # 외부 PC
@@ -28,8 +27,6 @@ OK
 | IGW 경로 또는 서브넷 연결 오류 | Route Table Routes·Subnet associations, IGW attachment 확인 | 해당 서브넷의 기본 경로와 VPC 연결 정상 |
 | SG의 HTTP 규칙 누락 | EC2에 실제 연결된 모든 SG 규칙 확인 | SSH 22 규칙만 있고 HTTP 80 허용 없음 |
 | NACL 또는 OS 방화벽 차단 | 서브넷 NACL 양방향, OS 방화벽 규칙 확인 | 기본 허용 NACL, OS의 80 차단 없음 |
-
-`/var/log/nginx/access.log`에는 해당 외부 요청 기록이 없다고 가정한다. 이는 HTTP 처리 이전 차단 가능성을 뒷받침하지만, 로깅 설정이나 다른 원인도 있어 로그 부재만으로 SG 원인을 확정하지 않는다.
 
 ### 조치
 
