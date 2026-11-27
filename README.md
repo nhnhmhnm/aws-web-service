@@ -19,7 +19,7 @@ VPC로 격리된 네트워크를 설계하고 EC2에 Nginx를 배포하는 과�
 
 ![VPC, Public Subnet, IGW, Security Group, EC2와 요청 흐름](docs/images/architecture.png)
 
-외부 HTTP 요청은 IGW를 거쳐 EC2의 네트워크 인터페이스에 도달하고, 연결된 보안 그룹의 TCP 80 규칙을 통과하면 Nginx가 응답한다. 서브넷의 라우팅 테이블은 인터넷 목적지 경로를 지정한다.
+사용자가 EC2의 퍼블릭 IPv4 주소로 HTTP 요청을 보내면, 요청은 Internet Gateway(IGW)를 통해 VPC에 들어와 EC2의 네트워크 인터페이스에 도달한다. EC2에 연결된 Security Group의 인바운드 TCP 80 규칙이 요청을 허용하면 Nginx가 요청을 처리하고, HTTP 응답은 같은 연결을 통해 사용자의 브라우저로 돌아간다. Security Group은 상태 저장 방식이므로 허용된 인바운드 요청의 응답은 자동으로 허용되며, Public Subnet의 라우팅 테이블에 설정된 `0.0.0.0/0 → IGW` 경로를 통해 인터넷으로 반환된다.
 
 ## 3. 보안 그룹 및 접근 설정
 
