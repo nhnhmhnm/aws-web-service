@@ -9,10 +9,10 @@
 외부 PC에서 `curl -i --connect-timeout 5 http://203.0.113.10/health`를 요청하면 연결 시간 초과가 발생한다고 가정한다. SSH는 연결되며 EC2 내부 `curl -i http://localhost/health`는 200과 `OK`를 반환한다.
 
 ```text
-# 가상 출력 — 외부 PC
+# 외부 PC
 curl: (28) Failed to connect to 203.0.113.10 port 80: Timeout was reached
 
-# 가상 출력 — EC2 내부
+# EC2 내부
 HTTP/1.1 200 OK
 Content-Type: text/plain
 
@@ -69,7 +69,6 @@ sudo tail -n 30 /var/log/nginx/error.log
 가상 재현 조건은 `return 200 "OK\n";`에서 끝의 세미콜론을 누락한 것이다. 다음은 이를 설명하기 위한 축약 로그이다.
 
 ```text
-# 가상 로그 — 실제 수집 아님
 nginx: [emerg] unexpected "}" in /etc/nginx/nginx.conf:LINE
 nginx: configuration file /etc/nginx/nginx.conf test failed
 nginx.service: Failed with result 'exit-code'.
